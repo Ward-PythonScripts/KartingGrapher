@@ -1,13 +1,29 @@
 import matplotlib.pyplot as plt
 import os
+import tkinter
 
 #initializers
 headers = []
 times = []
 
+def GUI():
+    m = tkinter.Tk()
+    m.title("Karting Grapher")
+    m.geometry("1000x200")
+    label_file_explorer = tkinter.Label(m,text="Welcome to the kart timing plotter. To use browse the file with times. \nIt is important that the times do not have letters or symbols on the same line and that the timings are seperated by a header(e.g. session1). \nEmpty lines are allowed to be in the txt file",width = 120, height = 3, fg="blue")
+    button_explore = tkinter.Button(m,text = "Browse data", command= getData)
+    button_exit = tkinter.Button(m,text= "Exit", command= exit)
+
+    label_file_explorer.grid(column=1,row=1)
+    button_explore.grid(column=1,row=2)
+    button_exit.grid(column=1,row=3)
+    m.mainloop()
+    return
+def startApplication():
+    GUI()
+    return
 
 def getData():
-    print("Welcome to the kart timing plotter \nTo use copy the file with times in the same directory as this file\nIt is important that the times do not have letters or symbols on the same line and that the timings are sperated by a header(e.g. session1)\nEmpty lines are allowed to be in the txt file")
     data = openFile()
     index = -1
     for line in data:
@@ -19,6 +35,7 @@ def getData():
                 index +=1
             else:
                 times[index].append(float(line))
+    plotData(20)
     return
 def plotData(amountOfYTicks):
     for i in range(0,len(times)):
@@ -33,17 +50,12 @@ def plotData(amountOfYTicks):
     plt.close()
 
 def openFile():
-    print("Which file would you like to open? \n(include the extension and the file should be in the same directory as this .py file)")
     while True:
         try:
-            scriptName = os.path.basename(__file__)
-            localPath = __file__
-            localPath2 = localPath[:len(localPath) - len(scriptName)]
-            #print(localPath2)
-            txtName = input()
-            filePath = localPath2  + txtName
-            print(filePath)
-            file = open(filePath, 'r', encoding='utf-8-sig')
+            from tkinter import filedialog
+            filename = tkinter.filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes= (("Text files", "*.txt*"), ("all files","*.*" )))
+            print(filename)
+            file = open(filename, 'r', encoding='utf-8-sig')
             return file
         except(Exception):
             print("File not found try again\n(include the extension and the file should be in the same directory as this .py file)")
@@ -69,10 +81,5 @@ def getYTicks(t :list,amountOfYTicks:int):
 
 
 ###main
-#modifyable variables
-amountOfYTicks = 20
-#############
-getData()
-plotData(amountOfYTicks)
-print(headers)
-print(times)
+
+startApplication()
