@@ -46,6 +46,7 @@ def plotData(amountOfYTicks):
         plt.ylabel("lap time")
         plt.xticks(laps)
         plt.yticks(getYTicks(times[i],amountOfYTicks))
+        plt.grid(True)
     plt.show()
     plt.close()
 
